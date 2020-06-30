@@ -8,11 +8,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.touch_actions import TouchActions
+
 
 
 acceptTermsButton = '/html/body/div[2]/div[5]/div/div/div[2]/div[2]'
 gameCanvas = '/html/body/canvas[2]'
 instructions = '//*[@id="instructions" and contains(text(), "PLAY")]'
+
 path = r"D:\Downloads\geckodriver-v0.26.0-win64\geckodriver.exe"
 chromePath = r"D:\Downloads\chromedriver_win32\chromedriver.exe"
 
@@ -28,9 +31,10 @@ def thread_function(arg):
 
   chrome_options = Options()
   chrome_options.add_argument("--headless")
+  chrome_options.add_experimental_option('w3c', False)
   chrome_options.add_argument('--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1')
-  # driver = webdriver.Chrome(options=chrome_options, executable_path = chromePath)
-  driver = webdriver.Chrome(options=chrome_options)
+  driver = webdriver.Chrome(options=chrome_options, executable_path = chromePath)
+  # driver = webdriver.Chrome(options=chrome_options)
 
   driver.get("https://krunker.io/?game=SV:" + url)
 
@@ -44,6 +48,7 @@ def thread_function(arg):
   """))
 
   send_space = ActionChains(driver).send_keys(Keys.SPACE)
+  touchactions = TouchActions(driver)
 
   while True:
     try:
@@ -56,7 +61,7 @@ def thread_function(arg):
       print(header + "retrying accepting terms & conditions")
       # for entry in driver.get_log('browser'):
       #   print(entry)  
-      print (driver.execute_script("return window.errs;"))
+      # print (driver.execute_script("return window.errs;"))
       driver.save_screenshot('test.png')
 
   while True:
@@ -65,12 +70,16 @@ def thread_function(arg):
       driver.find_element(By.XPATH, gameCanvas).click()
       # driver.switch_to.window(driver.current_window_handle)
       print(header + "clicked!")
-      driver.save_screenshot('test.png')
+      # driver.save_screenshot('test.png')
     except TimeoutException:
       # in game
-      send_space.perform()
+      # send_space.perform()
+
+      jump_button = driver.find_element_by_css_selector("#mobileJump")
+      touchactions.tap(jump_button).perform()
+
       print(header + "sending space to prevent afk")
-      driver.save_screenshot('test.png')
+      # driver.save_screenshot('test.png')
   driver.close()
   
 if __name__ == "__main__":
