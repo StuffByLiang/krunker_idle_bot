@@ -12,23 +12,25 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 acceptTermsButton = '/html/body/div[2]/div[5]/div/div/div[2]/div[2]'
 gameCanvas = '/html/body/canvas[2]'
-instructions = '//*[@id="instructions" and contains(text(), "CLICK")]'
+instructions = '//*[@id="instructions" and contains(text(), "PLAY")]'
 path = r"D:\Downloads\geckodriver-v0.26.0-win64\geckodriver.exe"
 chromePath = r"D:\Downloads\chromedriver_win32\chromedriver.exe"
 
 def thread_function(arg):
   header = "Thread " + str(arg) + ": " 
-  opts = webdriver.FirefoxOptions()
-  opts.add_argument("--headless")
-  d = DesiredCapabilities.FIREFOX
-  d['loggingPrefs'] = {'browser': 'ALL'}
-  # opts.add_argument("--width=400")
-  # opts.add_argument("--height=400")
-  driver = webdriver.Firefox(capabilities=d, options=opts, executable_path=path)
+  # opts = webdriver.FirefoxOptions()
+  # opts.add_argument("--headless")
+  # d = DesiredCapabilities.FIREFOX
+  # d['loggingPrefs'] = {'browser': 'ALL'}
+  # # opts.add_argument("--width=400")
+  # # opts.add_argument("--height=400")
+  # driver = webdriver.Firefox(capabilities=d, options=opts, executable_path=path)
 
-  # chrome_options = Options()
-  # # chrome_options.add_argument("--headless")
+  chrome_options = Options()
+  chrome_options.add_argument("--headless")
+  chrome_options.add_argument('--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1')
   # driver = webdriver.Chrome(options=chrome_options, executable_path = chromePath)
+  driver = webdriver.Chrome(options=chrome_options)
 
   driver.get("https://krunker.io/?game=SV:" + url)
 
